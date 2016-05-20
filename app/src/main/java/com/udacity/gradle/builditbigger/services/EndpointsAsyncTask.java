@@ -3,7 +3,6 @@ package com.udacity.gradle.builditbigger.services;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Pair;
 import android.widget.Toast;
 
 import com.example.rodrigo.alencar.myapplication.backend.jokeMakerApi.JokeMakerApi;
@@ -11,6 +10,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
+import com.google.api.client.util.Strings;
 import com.rodrigoalencar.jokeui.JokeUI;
 import com.rodrigoalencar.jokeui.JokeUIFragment;
 
@@ -19,12 +19,16 @@ import java.io.IOException;
 /**
  * Created by rodrigo.alencar on 5/20/16.
  */
-public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
+public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
     private static JokeMakerApi myApiService = null;
     private Context context;
 
+    public EndpointsAsyncTask(Context context) {
+        this.context = context;
+    }
+
     @Override
-    protected String doInBackground(Pair<Context, String>... params) {
+    protected String doInBackground(Void... params) {
         if(myApiService == null) {  // Only do this once
             JokeMakerApi.Builder builder = new JokeMakerApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -43,9 +47,6 @@ public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, S
             myApiService = builder.build();
         }
 
-        context = params[0].first;
-        String name = params[0].second;
-
         try {
             return myApiService.makeJoke().execute().getData();
         } catch (IOException e) {
@@ -55,9 +56,12 @@ public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, S
 
     @Override
     protected void onPostExecute(String result) {
-//        Toast.makeText(context, result, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(context, JokeUI.class);
-        intent.putExtra(JokeUIFragment.ARG_JOKE_TEXT, result);
-        context.startActivity(intent);
+        if(Strings.isNullOrEmpty(result)) {
+            Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(context, JokeUI.class);
+            intent.putExtra(JokeUIFragment.ARG_JOKE_TEXT, result);
+            context.startActivity(intent);
+        }
     }
 }
