@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">jokeui</string>
+    <string name="joke_place_holder_fragment">Ha ha ha hahaha haha ha haha</string>
 </resources>

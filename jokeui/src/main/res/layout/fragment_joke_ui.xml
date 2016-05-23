@@ -8,6 +8,8 @@
         android:id="@+id/jokeTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
         tools:text="@string/joke_place_holder_fragment" />
 
 </FrameLayout>
