@@ -42,7 +42,3 @@ dependencies {
     compile 'com.google.android.gms:play-services:9.0.0'
     compile 'com.android.support:design:23.3.0'
 }
-
-task testGCE << {
-    project(":backend").e
-}
