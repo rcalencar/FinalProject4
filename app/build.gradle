@@ -1,15 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'udacity'
-            keyPassword 'udacity'
-            storeFile file('/Users/rodrigo.alencar/android-studio-projects/udacity.jks')
-            storePassword 'udacity'
-        }
-    }
-
     testBuildType "debug"
 
     compileSdkVersion 23
@@ -20,15 +11,21 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
-        testInstrumentationRunner 'com.android.test.runner.MultiDexTestRunner'
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
+        }
+    }
+
+    productFlavors {
+        free {
+            applicationId 'com.udacity.gradle.builditbigger.free'
+        }
+        paid {
+            applicationId 'com.udacity.gradle.builditbigger.paid'
         }
     }
 }
@@ -39,6 +36,6 @@ dependencies {
     compile project(':jokeui')
     compile project(path: ':backend', configuration: 'android-endpoints')
     compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.google.android.gms:play-services:9.0.0'
     compile 'com.android.support:design:23.3.0'
+    freeCompile 'com.google.android.gms:play-services-ads:9.0.0'
 }
